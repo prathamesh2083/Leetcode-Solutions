@@ -1,0 +1,45 @@
+
+class Solution {
+public:
+    map<TreeNode * ,pair<int,int>>mp;
+    void find(TreeNode * p){
+         if(p==NULL){
+            
+            return;
+         }
+        if(p->left==NULL && p->right==NULL){
+            mp[p].first=mp[p].second=p->val;
+            return;
+          
+        }
+        
+        int mn=p->val,mx=p->val;
+        find(p->left);
+        find(p->right);
+        if(p->left){
+        
+           mn=min(mn,mp[p->left].first);
+           mx=max(mx,mp[p->left].second);
+        }
+        if(p->right){
+        
+           mn=min(mn,mp[p->right].first);
+           mx=max(mx,mp[p->right].second);
+        }
+        mp[p].first=min(p->val,mn);
+        mp[p].second=max(p->val,mx);
+        
+
+
+        
+    }
+    int maxAncestorDiff(TreeNode* root) {
+        find(root);
+        int ans=0;
+        for(auto it=mp.begin();it!=mp.end();it++){
+            ans=max(ans,max(abs(it->first->val-it->second.first),abs(it->first->val-it->second.second)));
+            
+        }
+        return ans;
+    }
+};
