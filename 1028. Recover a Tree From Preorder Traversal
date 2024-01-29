@@ -1,0 +1,62 @@
+
+class Solution
+{
+public:
+  TreeNode *recoverFromPreorder(string s)
+  {
+    
+    unordered_map<int, TreeNode *> mp;
+   
+    int n = s.length();
+    TreeNode *root = NULL;
+    int dep = 0;
+    string val = "";
+    
+    for (int i = 0; i < n; i++)
+    {
+      if (s[i] == '-')
+      {
+        dep++;
+      }
+      else
+      {
+        if (i == n - 1 || s[i + 1] == '-')
+        {
+          val += s[i];
+          int value = stoi(val);
+          TreeNode *tmp = new TreeNode;
+          tmp->val = value;
+          tmp->left = tmp->right = NULL;
+
+          if (root == NULL)
+          {
+           
+            mp[0] = tmp;
+            root = tmp;
+          }
+          else
+          {
+            if (!(mp[dep - 1]->left))
+            {
+              mp[dep - 1]->left = tmp;
+            }
+            else
+            {
+              mp[dep - 1]->right = tmp;
+            }
+            mp[dep] = tmp;
+          }
+
+          dep = 0;
+          val = "";
+        }
+        else
+        {
+          val += s[i];
+        }
+      }
+    }
+
+    return root;
+  }
+};
