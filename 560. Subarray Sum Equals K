@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& v, int k) {
+
+        int cnt = 0;
+        unordered_map<int, int> mp;
+        int psum = 0;
+        for (int i = 0; i < v.size(); i++) {
+            psum += v[i];
+            if (psum == k) {
+                cnt++;
+            }
+
+            if (mp.find(psum - k) != mp.end()) {
+                cnt += mp[psum - k];
+            }
+            mp[psum]++;
+        }
+        return cnt;
+    }
+};
