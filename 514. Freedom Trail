@@ -1,0 +1,64 @@
+class Solution {
+public:
+    int minsteps(string &ring, string &key, int i, int j,
+                 vector<vector<int>>& dp) {
+
+        if (j == key.size()) {
+            return 0;
+        }
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        int n = ring.size();
+        int dist = ring.size();
+        char ch = key[j];
+        // asdfghhjf
+        int left = -1, right = -1, ldist = n, rdist = n;
+        for (int k = i;; k--) {
+            if (ring[k] == ch) {
+                left = k;
+                if(k>i){
+                    ldist=n-(k-i);
+                }
+                else
+                ldist = abs(i - k);
+                break;
+            }
+            if (k == 0) {
+                k = n;
+            }
+        }
+        for (int k = i; ; k++) {
+            if (ring[k] == ch) {
+                right = k;
+                 if(k<i){
+                    rdist=n-(i-k);
+                }
+                else
+                rdist = abs(k - i);
+                break;
+            }
+            if (k == n - 1) {
+                k = -1;
+            }
+        }
+
+        if ( left == right) {
+
+            return dp[i][j] = (1 + min(ldist, rdist) +
+                               minsteps(ring, key, left, j + 1, dp));
+        } else {
+        
+            return dp[i][j] =min( (1 + rdist + minsteps(ring, key, right, j + 1, dp)),(1 + ldist + minsteps(ring, key, left, j + 1, dp)));
+                       
+        }
+    }
+
+
+
+ int findRotateSteps(string ring, string key) {
+    vector<vector<int>> dp(ring.size() + 10, vector<int>(key.size() + 10, -1));
+    return minsteps(ring, key, 0, 0, dp);
+  }
+
+};
